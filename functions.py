@@ -49,16 +49,23 @@ def sort(tree, column, descending): # Allows user to sort the data
 
 
 def addMenu(tree, engine, connection, metadata, inventory):
+    
+    testarray=[]
 
-    def getItemArgs(items, ID, price, available, checkedOut, description):
-        itemsStr = items.get()
-        IDStr = ID.get()
-        priceStr = price.get()
-        availableStr = available.get()
-        checkedOutStr = checkedOut.get()
-        descriptionStr = description.get()
-        print(itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr)
-        return itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr
+    def getItemArgs(*args):
+        itemsStr = stringvar1.get()
+        IDStr = stringvar2.get()
+        priceStr = stringvar3.get()
+        availableStr = stringvar4.get()
+        checkedOutStr = stringvar5.get()
+        descriptionStr = stringvar6.get()
+        if itemsStr and IDStr and priceStr and availableStr and checkedOutStr and descriptionStr:
+            ContButton.config(state='normal', command=lambda:testarray.append([itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr]))
+            print(testarray)
+            # return itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr
+        else:
+            ContButton.config(state='disabled')
+        
     
     root = tk.Tk()
     root.wm_title('Add A New Item')
@@ -67,12 +74,26 @@ def addMenu(tree, engine, connection, metadata, inventory):
     for i in labels:
         tk.Label(root, text=i, justify=tk.LEFT, anchor='w').grid(row=labels.index(i))
 
-    items = tk.Entry(root)
-    ID = tk.Entry(root)
-    price = tk.Entry(root)
-    available = tk.Entry(root)
-    checkedOut = tk.Entry(root)
-    description = tk.Entry(root)
+    stringvar1 = tk.StringVar(root)
+    stringvar2 = tk.StringVar(root)
+    stringvar3 = tk.StringVar(root)
+    stringvar4 = tk.StringVar(root)
+    stringvar5 = tk.StringVar(root)
+    stringvar6 = tk.StringVar(root)
+
+    stringvar1.trace('w', getItemArgs)
+    stringvar2.trace('w', getItemArgs)
+    stringvar3.trace('w', getItemArgs)
+    stringvar4.trace('w', getItemArgs)
+    stringvar5.trace('w', getItemArgs)
+    stringvar6.trace('w', getItemArgs)
+
+    items = tk.Entry(root, width=40, textvariable=stringvar1)
+    ID = tk.Entry(root, width=40, textvariable=stringvar2)
+    price = tk.Entry(root, width=40, textvariable=stringvar3)
+    available = tk.Entry(root, width=40, textvariable=stringvar4)
+    checkedOut = tk.Entry(root, width=40, textvariable=stringvar5)
+    description = tk.Entry(root, width=40, textvariable=stringvar6)
 
     items.grid(row=0, column=1)
     ID.grid(row=1, column=1)
