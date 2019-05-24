@@ -27,13 +27,11 @@ root = tk.Tk()
 root.wm_title("Inventory Manager")
 
 def openKey(event):
-    fil = open(filedialog.askopenfilename(initialdir=os.getcwd(), filetypes=(("CSV", "*.csv"),("Data Base", "*.db"),("All Files", "*.*"))), newline= '')
-    print(fil)
-    return fil
+    functions.openFile()
     
 
 def newKey(event):
-    directory = filedialog.askdirectory()
+    directory = functions.newFile()
     print(directory)
     return directory
 
@@ -41,8 +39,8 @@ def newKey(event):
 
 file_menu = tk.Menu(root)
 file_submenu = tk.Menu(file_menu, tearoff=False)
-file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: filedialog.askdirectory())
-file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: filedialog.askopenfilename(initialdir="/", filetypes=(("CSV", "*.csv"),("All Files", "*.*"))))
+file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: functions.newFile())
+file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: functions.openFile())
 file_submenu.add_separator()
 file_submenu.add_command(label = 'Exit', command=lambda: root.quit())
 file_menu.add_cascade(label = 'File', menu = file_submenu)

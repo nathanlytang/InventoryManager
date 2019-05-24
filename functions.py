@@ -28,7 +28,13 @@ class totalChecked:
         self.totChecked = None
 
 def openFile():
-    filedialog.askopenfilename(initialdir="/", filetypes=(("CSV", "*.csv"),("All Files", "*.*")))
+    fil = open(filedialog.askopenfilename(initialdir="/", filetypes=(("CSV", "*.csv"),("Database", "*.db"),("All Files", "*.*"))))
+    print(fil)
+    return fil
+
+def newFile():
+    directory = filedialog.askdirectory()
+    return directory
 
 def sort(tree, column, descending): # Allows user to sort the data
 
