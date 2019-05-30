@@ -53,7 +53,7 @@ root.config(menu=file_menu)
 buttons = tk.Frame(bg='white')
 buttons.pack(fill=tk.BOTH)
 
-addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree, engine, connection, metadata, inventory))
+addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree, engine, connection, metadata, inventory, query, resultProxy))
 editButton = tk.Button(root, text='Edit', relief=tk.FLAT, bg='white')
 delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white')
 checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white')
