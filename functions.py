@@ -15,8 +15,8 @@ class itemsClass:
         self.item = None
         self.ID = None
         self.price = int
-        self.totAvail = object
-        self.totChecked = object
+        self.totAvail = totalAvailable()
+        self.totChecked = totalChecked()
         self.description = str
 
     def setItem(self, item):
@@ -61,11 +61,23 @@ class itemsClass:
     
 class totalAvailable:
     def __init__(self):
-        self.totAvail = None
+        self.totAvail = int
+
+    def setTotAvail(self, totAvail):
+        self.totAvail = totAvail
+
+    def getTotAvail(self):
+        return self.totAvail
 
 class totalChecked:
     def __init__(self):
-        self.totChecked = None
+        self.totChecked = int
+
+    def setTotChecked(self, totChecked):
+        self.totChecked = totChecked
+
+    def getTotChecked(self):
+        return self.totChecked
 
 def openFile():
     fil = open(filedialog.askopenfilename(initialdir="/", filetypes=(("CSV", "*.csv"),("Database", "*.db"),("All Files", "*.*"))))
@@ -99,26 +111,10 @@ def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
         description = stringvar3.get()
         if item and ID and price and available and checkedOut and description:
             ContButton.config(state='normal', command=lambda: ContButtonFunc(item, ID, price, available, checkedOut, description))
-            
-            # return itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr
         else:
             ContButton.config(state='disabled')
 
-    # def ContButtonFunc(itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr):
-    #     addItemsArray = [itemsStr, IDStr, priceStr, availableStr, checkedOutStr, descriptionStr]
-    #     query = sqlalchemy.insert(inventory)
-    #     values = [{'Item':addItemsArray[0], 'ID':addItemsArray[1], 'Price':addItemsArray[2], 'Available':addItemsArray[3], 'Checked Out':addItemsArray[4], 'Description':addItemsArray[5]}]
-    #     resultProxy = connection.execute(query, values)
-    #     results = connection.execute(sqlalchemy.select([inventory])).fetchall()
-    #     root.destroy()
-
     def ContButtonFunc(item, ID, price, available, checkedOut, description):
-        # item = items.get()
-        # ID = ID.get()
-        # price = price.get()
-        # available = available.get()
-        # checkedOut = checkedOut.get()
-        # description = description.get()
         
         newItem = itemsClass()
         newItem.setItem(item)
@@ -136,7 +132,7 @@ def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
         values = [{'Item':newItem.getItem(), 'ID':newItem.getID(), 'Price':newItem.getPrice(), 'Available':newItem.getTotAvail(), 'Checked Out':newItem.getTotChecked(), 'Description':newItem.getDescription()}]
         resultProxy = connection.execute(query, values)
         results = connection.execute(sqlalchemy.select([inventory])).fetchall()
-        
+        print(newItem.getTotAvail())
         root.destroy()
     
     
@@ -168,14 +164,6 @@ def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
     checkedOut = tk.Entry(root, width=40, textvariable=intVar3)
     description = tk.Entry(root, width=40, textvariable=stringvar3)
 
-    
-    # items = tk.Entry(root, width=40)
-    # ID = tk.Entry(root, width=40)
-    # price = tk.Entry(root, width=40)
-    # available = tk.Entry(root, width=40)
-    # checkedOut = tk.Entry(root, width=40)
-    # description = tk.Entry(root, width=40)
-
     item.grid(row=0, column=1)
     ID.grid(row=1, column=1)
     price.grid(row=2, column=1)
@@ -184,16 +172,10 @@ def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
     description.grid(row=5, column=1)
 
     ContButton = tk.Button(root, text='Continue', command=lambda: getItemArgs(item, ID, price, available, checkedOut, description))
-    # ContButton = tk.Button(root, text='Continue', command=lambda: ContButtonFunc(items, ID, price, available, checkedOut, description))
     ContButton.grid(row=6, column=1)
 
-    
-
     root.focus_force()
-
     root.mainloop()
-
-
 
 def printTreeview(tree, resultSet): # Updates the treeview with CSV data
 
