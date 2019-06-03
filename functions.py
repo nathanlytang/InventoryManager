@@ -79,6 +79,18 @@ class totalChecked:
     def getTotChecked(self):
         return self.totChecked
 
+def openSQL():
+    engine = sqlalchemy.create_engine('sqlite:///%s\\inventory.db' % os.getcwd())
+    connection = engine.connect()
+    metadata = sqlalchemy.MetaData()
+    inventory = sqlalchemy.Table('inventory', metadata, autoload=True, autoload_with=engine)
+    print(inventory.columns.keys())
+    query = sqlalchemy.select([inventory])
+    resultProxy = connection.execute(query)
+    resultSet = resultProxy.fetchall()
+    print(resultSet)
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet
+
 def openFile():
     fil = open(filedialog.askopenfilename(initialdir="/", filetypes=(("CSV", "*.csv"),("Database", "*.db"),("All Files", "*.*"))))
     print(fil)
@@ -102,7 +114,7 @@ def sort(tree, column, descending): # Allows user to sort the data
 
 def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
 
-    def getItemArgs(*args):
+    def getItemArgs(*args):  # Get items in entry
         item = stringvar1.get()
         ID = stringvar2.get()
         price = intVar1.get()
@@ -176,6 +188,18 @@ def addMenu(tree, engine, connection, metadata, inventory, query, resultProxy):
 
     root.focus_force()
     root.mainloop()
+
+
+def delItem(tree):
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+    selected_item = tree.selection()[0] # Deletes selected item from tree and rows
+    treeItem = tree.item(selected_item)['values']
+    for i in range(len(resultSet)):
+        if resultSet[i] == tuple(treeItem):
+            connection.execute(inventory.delete().where(inventory.columns.Item == treeItem[0]))
+            break
+    tree.delete(selected_item)
+
 
 def printTreeview(tree, resultSet): # Updates the treeview with CSV data
 

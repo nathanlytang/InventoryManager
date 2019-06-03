@@ -13,18 +13,10 @@ import csv
 import functions
 import sqlalchemy
 
-engine = sqlalchemy.create_engine('sqlite:///%s\\inventory.db' % os.getcwd())
-connection = engine.connect()
-metadata = sqlalchemy.MetaData()
-inventory = sqlalchemy.Table('inventory', metadata, autoload=True, autoload_with=engine)
-print(inventory.columns.keys())
-query = sqlalchemy.select([inventory])
-resultProxy = connection.execute(query)
-resultSet = resultProxy.fetchall()
-print(resultSet)
-
 root = tk.Tk()
 root.wm_title("Inventory Manager")
+
+engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL()
 
 def openKey(event):
     functions.openFile()
@@ -55,7 +47,7 @@ buttons.pack(fill=tk.BOTH)
 
 addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree, engine, connection, metadata, inventory, query, resultProxy))
 editButton = tk.Button(root, text='Edit', relief=tk.FLAT, bg='white')
-delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white')
+delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white', command=lambda: functions.delItem(tree))
 checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white')
 checkInButton = tk.Button(root, text='Check In', relief = tk.FLAT, bg='white')
 
