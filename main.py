@@ -48,8 +48,8 @@ buttons.pack(fill=tk.BOTH)
 addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree))
 editButton = tk.Button(root, text='Edit', relief=tk.FLAT, bg='white', command=lambda: functions.editMenu(tree))
 delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white', command=lambda: functions.delItem(tree))
-checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white')
-checkInButton = tk.Button(root, text='Check In', relief = tk.FLAT, bg='white')
+checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white', command=lambda: functions.checkOut(tree))
+checkInButton = tk.Button(root, text='Check In', relief = tk.FLAT, bg='white', command=lambda: functions.checkIn(tree))
 
 addButton.pack(side=tk.LEFT, ipadx=5, ipady=5, in_=buttons)
 editButton.pack(side=tk.LEFT, ipadx=5, ipady=5, in_=buttons)
@@ -88,6 +88,6 @@ container.grid_columnconfigure(0, weight=1)
 container.grid_rowconfigure(0, weight=1)
 
 
-functions.printTreeview(tree, resultSet)
+functions.printTreeview(tree)
 
 root.mainloop()
