@@ -97,7 +97,7 @@ def openFile():
     return fil
 
 def newFile():
-    directory = filedialog.askdirectory()
+    directory = filedialog.asksaveasfile(defaultextension=".db", filetypes=(("Database", "*.db"),))
     return directory
 
 def sort(tree, column, descending): # Allows user to sort the data
