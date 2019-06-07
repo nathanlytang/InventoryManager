@@ -92,8 +92,11 @@ def openSQL():
     return engine, connection, metadata, inventory, query, resultProxy, resultSet
 
 def openFile():
-    fil = open(filedialog.askopenfilename(initialdir="/", filetypes=(("Database", "*.db"),("CSV", "*.csv"),("All Files", "*.*"))))
-    print(fil)
+    fil = (filedialog.askopenfilename(initialdir="/", filetypes=(("Database", "*.db"),("CSV", "*.csv"),("All Files", "*.*"))))
+    if fil:
+        with open(fil) as file:
+            return file.read()
+    print(fil.name)
     return fil
 
 def newFile():
@@ -159,9 +162,10 @@ def addMenu(tree): # Add Menu
     root = tk.Tk()
     root.wm_title('Add A New Item')
     root.focus_force()
+    root.configure(background='white') 
     labels=('Item: ', 'ID: ', 'Price: ', 'Available: ', 'Checked Out: ', 'Description: ')
     for i in labels:
-        tk.Label(root, text=i, justify=tk.LEFT, anchor='w').grid(row=labels.index(i))
+        tk.Label(root, text=i, justify=tk.LEFT, bg='white', anchor='w').grid(row=labels.index(i))
 
     stringvar1 = tk.StringVar(root)
     stringvar2 = tk.StringVar(root)
@@ -177,12 +181,12 @@ def addMenu(tree): # Add Menu
     intVar2.trace('w', getItemArgs)
     intVar3.trace('w', getItemArgs)
 
-    item = tk.Entry(root, width=40, textvariable=stringvar1)
-    ID = tk.Entry(root, width=40, textvariable=stringvar2)
-    price = tk.Entry(root, width=40, textvariable=intVar1)
-    available = tk.Entry(root, width=40, textvariable=intVar2)
-    checkedOut = tk.Entry(root, width=40, textvariable=intVar3)
-    description = tk.Entry(root, width=40, textvariable=stringvar3)
+    item = tk.Entry(root, width=40, bg='white', textvariable=stringvar1)
+    ID = tk.Entry(root, width=40, bg='white', textvariable=stringvar2)
+    price = tk.Entry(root, width=40, bg='white', textvariable=intVar1)
+    available = tk.Entry(root, width=40, bg='white', textvariable=intVar2)
+    checkedOut = tk.Entry(root, width=40, bg='white', textvariable=intVar3)
+    description = tk.Entry(root, width=40, bg='white', textvariable=stringvar3)
 
     item.grid(row=0, column=1)
     ID.grid(row=1, column=1)
@@ -191,7 +195,7 @@ def addMenu(tree): # Add Menu
     checkedOut.grid(row=4, column=1)
     description.grid(row=5, column=1)
 
-    ContButton = tk.Button(root, text='Continue', command=lambda: getItemArgs(item, ID, price, available, checkedOut, description))
+    ContButton = tk.Button(root, text='Continue', bg='white', command=lambda: getItemArgs(item, ID, price, available, checkedOut, description))
     ContButton.grid(row=6, column=1)
 
     root.focus_force()
@@ -239,9 +243,10 @@ def editMenu(tree): # Edit Menu
     root = tk.Tk()
     root.wm_title('Edit')
     root.focus_force()
+    root.configure(background='white')
     labels=('Item: ', 'ID: ', 'Price: ', 'Available: ', 'Checked Out: ', 'Description: ')
     for i in labels:
-        tk.Label(root, text=i, justify=tk.LEFT, anchor='w').grid(row=labels.index(i))
+        tk.Label(root, text=i, justify=tk.LEFT, bg='white', anchor='w').grid(row=labels.index(i))
 
     stringvar1 = tk.StringVar(root)
     stringvar2 = tk.StringVar(root)
@@ -257,12 +262,12 @@ def editMenu(tree): # Edit Menu
     intVar2.trace('w', getItemArgs)
     intVar3.trace('w', getItemArgs)
 
-    item = tk.Entry(root, width=40, textvariable=stringvar1)
-    ID = tk.Entry(root, width=40, textvariable=stringvar2)
-    price = tk.Entry(root, width=40, textvariable=intVar1)
-    available = tk.Entry(root, width=40, textvariable=intVar2)
-    checkedOut = tk.Entry(root, width=40, textvariable=intVar3)
-    description = tk.Entry(root, width=40, textvariable=stringvar3)
+    item = tk.Entry(root, width=40, bg='white', textvariable=stringvar1)
+    ID = tk.Entry(root, width=40, bg='white', textvariable=stringvar2)
+    price = tk.Entry(root, width=40, bg='white', textvariable=intVar1)
+    available = tk.Entry(root, width=40, bg='white', textvariable=intVar2)
+    checkedOut = tk.Entry(root, width=40, bg='white', textvariable=intVar3)
+    description = tk.Entry(root, width=40, bg='white', textvariable=stringvar3)
 
     item.insert(tk.END, treeItem[0])
     ID.insert(tk.END, treeItem[1])
@@ -278,7 +283,7 @@ def editMenu(tree): # Edit Menu
     checkedOut.grid(row=4, column=1)
     description.grid(row=5, column=1)
 
-    ContButton = tk.Button(root, text='Continue', command=lambda: getItemArgs(item, ID, price, available, checkedOut, description))
+    ContButton = tk.Button(root, text='Continue', bg='white', command=lambda: getItemArgs(item, ID, price, available, checkedOut, description))
     ContButton.grid(row=6, column=1)
 
     root.focus_force()
