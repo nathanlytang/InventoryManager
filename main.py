@@ -32,12 +32,18 @@ def newKey(event):
     print(directory)
     return directory
 
+def openFileTree(tree):
+    global engine, connection, metadata, inventory, query, resultProxy, resultSet
+    fil = functions.openFile(tree)
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(fil)
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet
+
 # File Menu
 
 file_menu = tk.Menu(root)
 file_submenu = tk.Menu(file_menu, tearoff=False)
 file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: functions.newFile(tree))
-file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: functions.openFile(tree))
+file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: openFileTree(tree))
 file_submenu.add_separator()
 file_submenu.add_command(label = 'Exit', command=lambda: root.quit())
 file_menu.add_cascade(label = 'File', menu = file_submenu)
