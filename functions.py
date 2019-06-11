@@ -79,8 +79,8 @@ class totalChecked:
     def getTotChecked(self):
         return self.totChecked
 
-def openSQL():
-    engine = sqlalchemy.create_engine('sqlite:///%s\\inventory.db' % os.getcwd())
+def openSQL(filename):
+    engine = sqlalchemy.create_engine('sqlite:///%s' % filename)
     connection = engine.connect()
     metadata = sqlalchemy.MetaData()
     inventory = sqlalchemy.Table('inventory', metadata, autoload=True, autoload_with=engine)
@@ -91,16 +91,29 @@ def openSQL():
     print(resultSet)
     return engine, connection, metadata, inventory, query, resultProxy, resultSet
 
-def openFile():
-    fil = (filedialog.askopenfilename(initialdir="/", filetypes=(("Database", "*.db"),("CSV", "*.csv"),("All Files", "*.*"))))
-    if fil:
-        with open(fil) as file:
-            return file.read()
-    print(fil.name)
+def openFile(tree):
+    fil = (filedialog.askopenfilename(initialdir="/", filetypes=(("Database", "*.db"),("All Files", "*.*"))))
+    print(fil)
+    printTreeview(tree, fil)
     return fil
 
-def newFile():
+
+def newFile(tree):
     directory = filedialog.asksaveasfile(defaultextension=".db", filetypes=(("Database", "*.db"),))
+    print(directory.name)
+    engine = sqlalchemy.create_engine('sqlite:///%s' % directory.name)
+    connection = engine.connect()
+    metadata = sqlalchemy.MetaData()
+    inventory = sqlalchemy.Table('inventory', metadata,
+              sqlalchemy.Column('Item', sqlalchemy.String()),
+              sqlalchemy.Column('ID', sqlalchemy.String()),
+              sqlalchemy.Column('Price', sqlalchemy.Integer()),
+              sqlalchemy.Column('Available', sqlalchemy.Integer()),
+              sqlalchemy.Column('CheckedOut', sqlalchemy.Integer()),
+              sqlalchemy.Column('Description', sqlalchemy.String())
+              )
+    metadata.create_all(engine)
+    printTreeview(tree, directory.name)
     return directory
 
 def sort(tree, column, descending): # Allows user to sort the data
@@ -122,9 +135,9 @@ def sort(tree, column, descending): # Allows user to sort the data
 
 
 
-def addMenu(tree): # Add Menu
+def addMenu(tree, filename): # Add Menu
 
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
 
     def getItemArgs(*args):  # Get items in entry
         item = stringvar1.get()
@@ -201,9 +214,9 @@ def addMenu(tree): # Add Menu
     root.focus_force()
     root.mainloop()
 
-def editMenu(tree): # Edit Menu
+def editMenu(tree, filename): # Edit Menu
 
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
     selected_item = tree.selection()[0]
     treeItem = tree.item(selected_item)['values']
 
@@ -239,7 +252,7 @@ def editMenu(tree): # Edit Menu
         results = connection.execute(sqlalchemy.select([inventory])).fetchall()
         root.destroy()
 
-    delItem(tree)
+    delItem(tree, filename)
     root = tk.Tk()
     root.wm_title('Edit')
     root.focus_force()
@@ -290,8 +303,8 @@ def editMenu(tree): # Edit Menu
     root.mainloop()
 
 
-def delItem(tree): # Delete item
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+def delItem(tree, filename): # Delete item
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
     selected_item = tree.selection()[0] # Deletes selected item from tree and db file
     treeItem = tree.item(selected_item)['values']
     for i in range(len(resultSet)):
@@ -301,8 +314,8 @@ def delItem(tree): # Delete item
     tree.delete(selected_item)
 
 
-def checkOut(tree): # Check out an item
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+def checkOut(tree, filename): # Check out an item
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
     selected_item = tree.selection()[0]
     treeItem = tree.item(selected_item)['values']
     for i in range(len(resultSet)):
@@ -310,10 +323,10 @@ def checkOut(tree): # Check out an item
             connection.execute(sqlalchemy.update(inventory).values(
                 Available = treeItem[3] - 1, CheckedOut = treeItem[4] + 1).where(inventory.columns.Item == treeItem[0]))
             break
-    printTreeview(tree)
+    printTreeview(tree, filename)
 
-def checkIn(tree): # Check in an item
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+def checkIn(tree, filename): # Check in an item
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
     selected_item = tree.selection()[0]
     treeItem = tree.item(selected_item)['values']
     for i in range(len(resultSet)):
@@ -321,11 +334,11 @@ def checkIn(tree): # Check in an item
             connection.execute(sqlalchemy.update(inventory).values(
                 Available = treeItem[3] + 1, CheckedOut = treeItem[4] - 1).where(inventory.columns.Item == treeItem[0]))
             break
-    printTreeview(tree)
+    printTreeview(tree, filename)
 
-def printTreeview(tree): # Updates the treeview
+def printTreeview(tree, filename): # Updates the treeview
 
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL()
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = openSQL(filename)
 
     tree.delete(*tree.get_children()) # Delete tree
 

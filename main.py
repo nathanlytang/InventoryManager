@@ -16,14 +16,19 @@ import sqlalchemy
 root = tk.Tk()
 root.wm_title("Inventory Manager")
 
-engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL()
+filename = '%s\\inventory.db' % os.getcwd()
+
+engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(filename)
 
 def openKey(event):
-    functions.openFile()
+    global filename
+    filename = functions.openFile(tree)
+    print(filename)
+    return filename
     
 
 def newKey(event):
-    directory = functions.newFile()
+    directory = functions.newFile(tree)
     print(directory)
     return directory
 
@@ -31,8 +36,8 @@ def newKey(event):
 
 file_menu = tk.Menu(root)
 file_submenu = tk.Menu(file_menu, tearoff=False)
-file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: functions.newFile())
-file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: functions.openFile())
+file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: functions.newFile(tree))
+file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: functions.openFile(tree))
 file_submenu.add_separator()
 file_submenu.add_command(label = 'Exit', command=lambda: root.quit())
 file_menu.add_cascade(label = 'File', menu = file_submenu)
@@ -45,11 +50,11 @@ root.config(menu=file_menu)
 buttons = tk.Frame(bg='white')
 buttons.pack(fill=tk.BOTH)
 
-addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree))
-editButton = tk.Button(root, text='Edit', relief=tk.FLAT, bg='white', command=lambda: functions.editMenu(tree))
-delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white', command=lambda: functions.delItem(tree))
-checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white', command=lambda: functions.checkOut(tree))
-checkInButton = tk.Button(root, text='Check In', relief = tk.FLAT, bg='white', command=lambda: functions.checkIn(tree))
+addButton = tk.Button(root, text='Add', relief=tk.FLAT, bg='white', command=lambda: functions.addMenu(tree, filename))
+editButton = tk.Button(root, text='Edit', relief=tk.FLAT, bg='white', command=lambda: functions.editMenu(tree, filename))
+delButton = tk.Button(root, text='Delete', relief=tk.FLAT, bg='white', command=lambda: functions.delItem(tree, filename))
+checkOutButton = tk.Button(root, text='Check Out', relief=tk.FLAT, bg='white', command=lambda: functions.checkOut(tree, filename))
+checkInButton = tk.Button(root, text='Check In', relief = tk.FLAT, bg='white', command=lambda: functions.checkIn(tree, filename))
 
 addButton.pack(side=tk.LEFT, ipadx=5, ipady=5, in_=buttons)
 editButton.pack(side=tk.LEFT, ipadx=5, ipady=5, in_=buttons)
@@ -88,6 +93,6 @@ container.grid_columnconfigure(0, weight=1)
 container.grid_rowconfigure(0, weight=1)
 
 
-functions.printTreeview(tree)
+functions.printTreeview(tree, filename)
 
 root.mainloop()
