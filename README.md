@@ -25,3 +25,4 @@ An inventory manager using Python, Tkinter, SQLite, and SQLAlchemy
 * Zero Bug - Use of IntVar in entry widget creates zeroes
 * ID sorting - Sorting on ID column unavailable due combination of list and tuple
 * Open File and New File - Currently updates the wrong .db file
+* Negative Amount - Available and Checked Out can go negative
