@@ -21,29 +21,34 @@ filename = '%s\\inventory.db' % os.getcwd()
 engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(filename)
 
 def openKey(event):
-    global filename
-    filename = functions.openFile(tree)
-    print(filename)
-    return filename
+    engine, connection, metadata, inventory, query, resultProxy, resultSet, filename = openFileTree(tree)
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
     
 
 def newKey(event):
-    directory = functions.newFile(tree)
-    print(directory)
-    return directory
+    engine, connection, metadata, inventory, query, resultProxy, resultSet, filename = newFileTree(tree)
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
 
 def openFileTree(tree):
     global engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
     engine.dispose()
     filename = functions.openFile(tree)
     engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(filename)
-    return engine, connection, metadata, inventory, query, resultProxy, resultSet
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
+
+def newFileTree(tree):
+    global engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
+    engine.dispose()
+    filename = functions.newFile(tree)
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(filename)
+    return engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
+
 
 # File Menu
 
 file_menu = tk.Menu(root)
 file_submenu = tk.Menu(file_menu, tearoff=False)
-file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: functions.newFile(tree))
+file_submenu.add_command(label = 'New         Ctrl+N', command=lambda: newFileTree(tree))
 file_submenu.add_command(label = 'Open        Ctrl+O', command=lambda: openFileTree(tree))
 file_submenu.add_separator()
 file_submenu.add_command(label = 'Exit', command=lambda: root.quit())

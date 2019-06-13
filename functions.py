@@ -92,11 +92,10 @@ def openSQL(filename):
     return engine, connection, metadata, inventory, query, resultProxy, resultSet
 
 def openFile(tree):
-    fil = (filedialog.askopenfilename(initialdir="/", filetypes=(("Database", "*.db"),("All Files", "*.*"))))
-    print(fil)
-    printTreeview(tree, fil)
-    return fil
-
+    filename = (filedialog.askopenfilename(initialdir=os.getcwd(), filetypes=(("Database", "*.db"),("All Files", "*.*"))))
+    print(filename)
+    printTreeview(tree, filename)
+    return filename
 
 def newFile(tree):
     directory = filedialog.asksaveasfile(defaultextension=".db", filetypes=(("Database", "*.db"),))
@@ -114,7 +113,7 @@ def newFile(tree):
               )
     metadata.create_all(engine)
     printTreeview(tree, directory.name)
-    return directory
+    return directory.name
 
 def sort(tree, column, descending): # Allows user to sort the data
 
