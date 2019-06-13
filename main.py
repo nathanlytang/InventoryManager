@@ -33,9 +33,10 @@ def newKey(event):
     return directory
 
 def openFileTree(tree):
-    global engine, connection, metadata, inventory, query, resultProxy, resultSet
-    fil = functions.openFile(tree)
-    engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(fil)
+    global engine, connection, metadata, inventory, query, resultProxy, resultSet, filename
+    engine.dispose()
+    filename = functions.openFile(tree)
+    engine, connection, metadata, inventory, query, resultProxy, resultSet = functions.openSQL(filename)
     return engine, connection, metadata, inventory, query, resultProxy, resultSet
 
 # File Menu
