@@ -12,14 +12,7 @@ An inventory manager using Python, Tkinter, SQLite, and SQLAlchemy
     * SQLAlchemy 
         Run `pip install SQLAlchemy` in terminal or console after installing Python
 2. Clone the repository
-    `git clone https://git.mikezhang.ca/n.tang/InventoryManager.git` (Currently unavailable)
-
-## Features
-* Coming soon™
-
-## Currently Working On
-* User can create a new .db file
-* User can open a separate .db file
+    `git clone https://github.com/nathanlytang/InventoryManger.git`
 
 ## Bugs
 * Zero Bug - Use of IntVar in entry widget creates zeroes
