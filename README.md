@@ -1,6 +1,10 @@
 # Inventory Manager
 An inventory manager using Python, Tkinter, SQLite, and SQLAlchemy
 
+![Preview Image](preview.png "Preview Image")
+
+
+
 ## Usage
 1. Install dependencies
     * Python 3.x
